@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="ko" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Startup Coach & Drafts Hub - 2026 Edition</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#eef2ff',
+                            100: '#e0e7ff',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Inter Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="h-full bg-slate-50 text-slate-800 antialiased flex flex-col">
+
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-xs">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-xl bg-brand-600 flex items-center justify-center text-white font-bold text-xl shadow-md">
+                    🚀
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold text-slate-900">Startup Coach & Drafts Hub</h1>
+                    <p class="text-xs text-slate-500">20대 트렌디 도메인 맞춤형 시장검증부터 MVP 개발(Mock PRD)까지</p>
+                </div>
+            </div>
+            <div class="flex items-center space-x-2">
+                <button id="domain-switch-btn" onclick="openDomainModal()" class="px-3.5 py-1.5 text-xs font-semibold bg-indigo-50 text-brand-700 rounded-lg hover:bg-indigo-100 transition border border-indigo-200 flex items-center space-x-1 shadow-xs">
+                    <span>🌐</span>
+                    <span>핫 트렌드 도메인 세팅 (20선)</span>
+                </button>
+                <button onclick="downloadAllMarkdown()" class="px-3.5 py-1.5 text-xs font-semibold bg-slate-900 text-white rounded-lg hover:bg-slate-800 transition shadow-xs flex items-center space-x-1">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                    <span>통합본 다운로드</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col lg:flex-row gap-6 overflow-hidden">
+        
+        <!-- Sidebar Navigation -->
+        <aside class="w-full lg:w-80 bg-white rounded-2xl border border-slate-200 p-4 shadow-xs flex flex-col shrink-0">
+            <div class="mb-3 px-2 flex items-center justify-between">
+                <h2 class="text-xs font-semibold text-slate-400 uppercase tracking-wider">단계별 탐색 (Files 1~7)</h2>
+                <span id="active-step-badge" class="text-[10px] font-bold text-brand-600 bg-brand-50 px-2 py-0.5 rounded-full">1/7 단계</span>
+            </div>
+            <nav id="step-nav" class="space-y-1 overflow-y-auto max-h-[calc(100vh-240px)] pr-1">
+                <!-- Dynamically populated step buttons -->
+            </nav>
+            <div class="mt-auto pt-4 border-t border-slate-100 text-xs text-slate-400 text-center">
+                현재 도메인: <span id="current-domain-label" class="font-semibold text-slate-600">AI 맞춤 운동 추천 (Fit Match)</span>
+            </div>
+        </aside>
+
+        <!-- Document View and Editor -->
+        <section class="flex-1 bg-white rounded-2xl border border-slate-200 shadow-xs flex flex-col overflow-hidden">
+            <!-- Toolbar -->
+            <div class="px-6 py-4 border-b border-slate-200 flex flex-wrap items-center justify-between gap-3 bg-slate-50/50">
+                <div class="flex items-center space-x-2">
+                    <span id="doc-badge" class="px-2.5 py-1 text-xs font-semibold bg-brand-50 text-brand-700 rounded-md">1_2.md</span>
+                    <h3 id="doc-title" class="text-base font-bold text-slate-900">스타트업 코치 세팅 및 원칙 (초안 1)</h3>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <button onclick="copyCurrentContent()" class="px-3 py-1.5 text-xs font-medium bg-white border border-slate-200 text-slate-700 rounded-lg hover:bg-slate-50 transition flex items-center space-x-1 shadow-xs">
+                        <svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/></svg>
+                        <span>내용 복사</span>
+                    </button>
+                    <button onclick="downloadCurrentFile()" class="px-3 py-1.5 text-xs font-medium bg-white border border-slate-200 text-slate-700 rounded-lg hover:bg-slate-50 transition flex items-center space-x-1 shadow-xs">
+                        <svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                        <span>이 파일 다운로드</span>
+                    </button>
+                    <button onclick="toggleEditMode()" id="edit-mode-btn" class="px-3 py-1.5 text-xs font-medium bg-brand-600 text-white rounded-lg hover:bg-brand-700 transition shadow-xs">
+                        편집하기
+                    </button>
+                </div>
+            </div>
+
+            <!-- Content Area (Viewer / Editor) -->
+            <div class="flex-1 p-6 overflow-y-auto bg-white">
+                <div id="viewer-pane" class="prose max-w-none text-slate-700 leading-relaxed whitespace-pre-wrap font-mono text-sm bg-slate-50 p-6 rounded-xl border border-slate-200/80"></div>
+                <textarea id="editor-pane" class="w-full h-full min-h-[500px] p-4 font-mono text-sm bg-slate-50 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 hidden"></textarea>
+            </div>
+        </section>
+
+    </main>
+
+    <div id="domain-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-2xl max-w-3xl w-full p-6 shadow-2xl border border-slate-100 flex flex-col max-h-[90vh]">
+            <div class="flex items-center justify-between mb-3 pb-3 border-b border-slate-100">
+                <div>
+                    <h3 class="text-lg font-bold text-slate-900">🌐 20대 최신 트렌드 도메인 세팅 (20선)</h3>
+                    <p class="text-xs text-slate-500">선택한 도메인이 모든 마크다운 초안(1_2.md ~ 7_2.md)에 실시간으로 자동 적용됩니다.</p>
+                </div>
+                <button onclick="closeDomainModal()" class="text-slate-400 hover:text-slate-600 font-bold text-lg p-1">✕</button>
+            </div>
+            
+            <!-- Category Filter Tabs -->
+            <div class="flex flex-wrap gap-1.5 mb-4 shrink-0">
+                <button onclick="filterPresets('all')" id="tab-all" class="px-3 py-1 text-xs font-semibold rounded-lg bg-brand-600 text-white transition">전체 (20)</button>
+                <button onclick="filterPresets('ai')" id="tab-ai" class="px-3 py-1 text-xs font-semibold rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200 transition">AI & 자동화</button>
+                <button onclick="filterPresets('lifestyle')" id="tab-lifestyle" class="px-3 py-1 text-xs font-semibold rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200 transition">라이프 & 웰니스</button>
+                <button onclick="filterPresets('creator')" id="tab-creator" class="px-3 py-1 text-xs font-semibold rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200 transition">커리어 & 크리에이터</button>
+                <button onclick="filterPresets('indie')" id="tab-indie" class="px-3 py-1 text-xs font-semibold rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200 transition">1인창업 & 테크</button>
+            </div>
+
+            <!-- Presets Grid -->
+            <div id="presets-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 overflow-y-auto pr-1 mb-4 flex-1">
+                <!-- Populated via JS -->
+            </div>
+
+            <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
+                <div class="w-full mr-3">
+                    <input type="text" id="custom-domain-input" placeholder="또는 직접 입력 (예: 시니어 맞춤 스마트 홈케어 서비스)" class="w-full px-3 py-2 text-xs border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500">
+                </div>
+                <div class="flex space-x-2 shrink-0">
+                    <button onclick="closeDomainModal()" class="px-4 py-2 text-xs font-medium text-slate-600 hover:bg-slate-100 rounded-lg transition">취소</button>
+                    <button onclick="applySelectedDomain()" class="px-4 py-2 text-xs font-medium bg-brand-600 text-white rounded-lg hover:bg-brand-700 transition shadow-xs">선택 적용하기</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-6 right-6 bg-slate-900 text-white px-4 py-2.5 rounded-xl text-xs shadow-xl transition-all duration-300 transform translate-y-16 opacity-0 z-50 flex items-center space-x-2">
+        <span>✨</span>
+        <span id="toast-msg">클립보드에 복사되었습니다.</span>
+    </div>
+
+    <script>
+        let currentDomainName = "AI 맞춤 운동 추천·1주 운동 프로그램 서비스 (Fit Match)";
+        let activeFileKey = '1_2.md';
+        let isEditing = false;
+
+        // 20 Trendy Startup Domain Presets
+        const domainPresets = [
+            // AI & Automation
+            { id: 1, cat: 'ai', title: 'AI 면접관 실전 코칭 서비스 (JobPrep AI)', desc: '이직러 대상 AI 모의면접 및 피드백' },
+            { id: 2, cat: 'ai', title: '1인 크리에이터 쇼츠 자동 편집 AI (ShortsGen)', desc: '긴 영상에서 하이라이트 자동 추출' },
+            { id: 3, cat: 'ai', title: 'AI 실시간 재무제표 분석 및 세무 리포트 (TaxMate AI)', desc: '소상공인/프리랜서 전용 세무 비서' },
+            { id: 4, cat: 'ai', title: 'LLM 기반 다국어 계약서 검토 및 독소조항 탐지 (LexGuard)', desc: '글로벌 프리랜서 계약 리스크 분석' },
+            { id: 5, cat: 'ai', title: 'AI 음성 기반 회의록 요약 및 액션아이템 추출 (MeetingMind)', desc: '팀 협업 자동화 툴' },
+
+            // Lifestyle & Wellness
+            { id: 6, cat: 'lifestyle', title: 'AI 맞춤 운동 추천·1주 운동 프로그램 서비스 (Fit Match)', desc: '초보자 맞춤형 홈트 및 운동 루틴' },
+            { id: 7, cat: 'lifestyle', title: '1인가구 맞춤 저당·고단백 식단 구독 (Solo Meal Box)', desc: '건강 간편식 큐레이션' },
+            { id: 8, cat: 'lifestyle', title: '반려동물 홈케어 및 이상증상 사전 체크 (Pet Care Diary)', desc: '보호자용 스마트 건강 일지' },
+            { id: 9, cat: 'lifestyle', title: '불면증 완화 화이트노이즈 및 수면 패턴 분석 (DeepSleep)', desc: '꿀잠 가이드 및 수면 사운드' },
+            { id: 10, cat: 'lifestyle', title: '도심 속 플랜테리어 및 반려식물 성장 관리 (Greenly)', desc: '식집사를 위한 물주기 알림 및 진단' },
+
+            // Career & Creator
+            { id: 11, cat: 'creator', title: '직장인 실무 영어 스터디 매칭 커뮤니티 (Language Crew)', desc: '주니어 직장인 비즈니스 영어' },
+            { id: 12, cat: 'creator', title: '사이드 프로젝트 팀원 매칭 및 밋업 플랫폼 (SideProject Hub)', desc: '개발자·디자이너 협업 매칭' },
+            { id: 13, cat: 'creator', title: 'MZ세대 커리어 포트폴리오 빌더 및 피드백 (Portify)', desc: '돋보이는 원페이지 이력서 제작' },
+            { id: 14, cat: 'creator', title: '독립 북카페 및 취향 기반 독서모임 플랫폼 (BookTribe)', desc: '소모임 공간 예약 및 발제문 공유' },
+            { id: 15, cat: 'creator', title: '인디 디자이너 폰트·에셋 마켓플레이스 (DesignDrop)', desc: '크리에이터 소스 직거래 플랫폼' },
+
+            // Indie Hacker & Tech
+            { id: 16, cat: 'indie', title: '노코드 서비스 취약점 사전 진단 스캐너 (NoCode Shield)', desc: '웹/앱 보안 셀프 점검' },
+            { id: 17, cat: 'indie', title: '해외 직구 합배송 및 커스텀 관세 계산기 (Global Cart)', desc: '쇼핑몰 통합 배송비 최적화' },
+            { id: 18, cat: 'indie', title: '중고 의류 수거 및 프리미엄 위탁 판매 (ClothLoop)', desc: '지속가능 패션 리셀 서비스' },
+            { id: 19, cat: 'indie', title: '주말 근교 캠핑카 렌트 및 차박 장소 큐레이션 (Camper Road)', desc: '로컬 여행 및 차박 가이드' },
+            { id: 20, cat: 'indie', title: '시니어 부모님 스마트 홈케어 원격 모니터링 (SilverCare)', desc: '독거노인 안부 확인 및 센서 연동' }
+        ];
+
+        // Base templates matching files 1_2.md through 7_2.md
+        const baseFiles = {
+            '1_2.md': `지금부터 너는 창업 아이템의 시장검증부터 사업계획 구체화,
+웹서비스 PRD 작성과 MVP 제작까지 지원하는 스타트업 코치야.
+
+도메인 분야: **{DOMAIN_TITLE}**
+
+나는 이미 간단한 창업아이템을 선정하고
+원페이지 사업기획안을 작성한 상태야.
+
+첨부하거나 입력한 원페이지 기획안을 출발점으로 삼되,
+처음부터 다시 기획하지 말고
+이미 결정된 내용과 아직 검증되지 않은 가설을 먼저 구분해줘.
+
+앞으로는 다음 흐름으로 진행하고 싶어.
+
+STEP 1. 데이터 기반 시장검증
+STEP 2. 고객가설 및 사업기회 분석
+STEP 3. 사업모델 및 사업계획 구체화
+STEP 4. 핵심 사업가설을 검증할 MVP 선정
+STEP 5. Mini PRD 작성
+STEP 6. MVP 제작
+
+[진행 원칙]
+1. 결과를 한 번에 만들어주기보다 인터뷰 방식으로 나를 이끌어줘.
+2. 기존 원페이지 기획안에서 이미 정해진 내용은 다시 질문하지 말고, 검증이 필요하거나 부족한 내용만 질문해줘.
+3. 한 번에 질문은 1~2개만 해줘.
+4. 내가 답하기 어려운 질문이라면 내 사업아이템에 적합한 현실적인 선택지 2~3개를 먼저 제안해줘.
+5. 사실과 데이터로 확인된 내용, 사용자가 결정한 내용, 아직 확인되지 않은 가설을 구분해줘.
+6. 시장규모, 통계, 경쟁사, 고객 수요 등의 정보를 근거 없이 만들어내지 마. 검증되지 않았다면 [검증 필요]라고 표시해줘.
+7. 완벽하게 분석하려고 한 단계에서 너무 오래 머무르지 마. 각 STEP은 약 15~20분 안에 핵심 결과를 만드는 것을 목표로 해.
+8. 각 STEP이 끝나면 반드시 아래 형식으로 정리해줘.
+[이번 단계에서 확인한 것]
+[현재까지 확정된 것]
+[아직 검증이 필요한 것]
+[다음 단계에서 확인할 것]
+9. 내가 "다음 단계"라고 입력하기 전까지 다음 STEP으로 넘어가지 마.
+10. 최종 목적은 완벽한 사업계획서 작성이 아니라 시장과 고객의 핵심 가설을 근거로 정리하고, 그 가설을 실제로 테스트할 수 있는 MVP를 만드는 것이야.
+
+먼저 내가 작성한 원페이지 사업기획안을 확인한 뒤,
+① 이미 결정된 내용
+② 아직 가설인 내용
+③ 데이터로 검증할 필요가 있는 내용
+세 가지로 간단히 분류해줘.
+
+그 다음 STEP 1 데이터 기반 시장검증을 위해 가장 중요한 질문 하나부터 시작해줘.`,
+
+            '2_2.md': `지금부터 너는 창업 아이템의 시장검증부터 사업계획 구체화,
+웹서비스 PRD 작성과 MVP 제작까지 지원하는 스타트업 코치야.
+
+도메인 분야: **{DOMAIN_TITLE}**
+
+나는 이미 간단한 창업아이템을 선정하고 원페이지 사업기획안을 작성한 상태야.
+이전 대화 맥락을 이어받아 심층 인터뷰를 진행해줘.`,
+
+            '3_2.md': `지금까지의 대화를 바탕으로
+[2단계 : 고객가설 · 사업기회] 결과를 정리해줘.
+도메인: {DOMAIN_TITLE}
+
+1단계 시장 검증 결과도 함께 반영해줘.
+아래 형식으로 작성해줘.
+
+1. 핵심 고객 (- 가장 먼저 공략할 고객, - 고객의 구체적인 상황)
+2. 고객의 핵심 문제
+3. 현재 대안
+4. 기존 대안의 한계
+5. 고객가설 (“________한 고객은 ________ 때문에 ________을 필요로 할 것이다.”)
+6. 데이터와 고객문제를 연결해서 발견한 사업기회
+7. 우리가 해결할 핵심 문제 1개
+8. 아직 검증되지 않은 고객가설
+
+마지막에 아래 두 문장을 작성해줘.
+[고객가설 한 문장]
+[사업기회 한 문장]`,
+
+            '4_2.md': `지금까지 진행한 1단계 시장 검증 및 2단계 고객가설 분석 결과를 모두 반영하여
+[3단계 : 사업계획서 초안]을 작성해줘.
+대상 도메인: {DOMAIN_TITLE}
+
+아래 구조로 작성해줘:
+1. 사업아이템명 ({DOMAIN_TITLE})
+2. 사업 개요 (어떤 고객의, 어떤 문제를, 어떤 방식으로 해결하는지)
+3. 문제인식
+4. 핵심 고객
+5. 해결방안
+6. 차별성
+7. 시장 및 사업기회
+8. 수익모델
+9. 실행방안 (초기 MVP 범위)
+10. 핵심 사업가설
+
+마지막에는 [사업계획 핵심 요약]을 정리해줘.`,
+
+            '5_2.md': `# 3단계 : 사업계획서 초안 ({DOMAIN_TITLE})
+
+## 1. 사업아이템명
+### **{DOMAIN_TITLE}**
+
+> 관련 타깃 사용자가 자신의 목표와 상황에 맞는 서비스를 찾고, 바로 시작할 수 있도록 도와주는 개인 맞춤형 서비스
+
+## 2. 사업 개요
+- **어떤 고객의:** {DOMAIN_TITLE} 관련 솔루션이나 서비스가 필요하지만 스스로 선택하기 어려운 타깃 고객
+- **어떤 문제를:** 관련 정보 과잉 및 선택 장애, 구체적인 실행 단계의 어려움
+- **어떤 방식으로 해결하는지:** 간단한 질문답변을 통해 맞춤형 결과와 1주 단위 실행 프로그램 가이드를 제공
+
+## 3. 문제인식 및 핵심 고객
+- 고객가설과 핵심 사업가설을 토대로 실제 실행에 집중합니다. [추가 검증 필요]`,
+
+            '6_2.md': `지금까지 확정된 시장검증, 고객가설, 사업기회, 사업모델을 바탕으로
+[4-1단계 : MVP 정의 · Mini PRD]를 작성해줘.
+대상: {DOMAIN_TITLE}
+
+# Mini PRD ({DOMAIN_TITLE})
+
+## 1. 프로젝트명: {DOMAIN_TITLE}
+## 2. 서비스 목적: 타깃 고객 맞춤 추천 및 실행 지원
+## 3. 핵심 사용자: 해당 서비스가 절실한 초기 유저
+## 4. 핵심 사업가설: 맞춤형 추천과 간단한 프로세스가 실제 이용 행동을 유도할 것이다.
+## 5. 이번 MVP에서 검증할 가설: 핵심 가설 검증용 하위 가설
+## 6. User Flow: 입력 → 처리 → 결과
+## 7. 핵심 기능: 사용자 정보 입력, 맞춤 결과 및 가이드 제공, 실행 체크리스트
+## 8. 사용할 데이터: 사용자 입력 데이터 및 처리 데이터 [추가 검증 필요]
+## 9. 주요 화면: 입력 폼 화면, 결과 및 프로그램 화면
+## 10. 결과 화면 표시 정보: 맞춤 추천 결과 및 추천 이유
+## 11. MVP 성공 기준: 사용자 반응 및 이용 완료율 측정
+## 12. 이번 MVP에서 구현하지 않을 기능: 결제, 커뮤니티, 고도화된 AI 코칭 등`,
+
+            '7_2.md': `아래에 제공하는 Mini PRD를 바탕으로 Claude Code에서 바로 구현할 수 있는
+[4-2단계 : Mock MVP 개발용 PRD]로 변환해줘.
+대상 도메인: {DOMAIN_TITLE}
+
+[개발환경]
+- Next.js, TypeScript, React, Tailwind CSS
+- 외부 AI API 및 DB 없이 로컬 구동 가능한 구조 ({DOMAIN_TITLE})
+
+# Claude Code Mock MVP PRD
+
+## 1. 프로젝트 개요
+- 프로젝트명: {DOMAIN_TITLE}
+- 서비스 목적: MVP 검증 및 사용자 피드백 수집
+- 핵심 사용자: 초기 타깃 유저
+- 핵심 사업가설: 맞춤 결과 제공을 통한 실행 유도
+
+## 2. 개발 범위
+- 필수 기능: 입력 폼, 더미 추천 로직, 결과 화면
+- 제외 기능: 인증, DB, 외부 결제
+
+## 3. User Flow
+입력 → 처리(Mock) → 결과
+
+## 4. 화면 구성
+- 입력 화면 / 결과 화면
+
+## 5. 프로젝트 구조 및 Claude Code 시작 명령
+app/ components/ data/ lib/ types/
+구현 후 로컬 실행 및 Vercel 배포 가능한 상태 유지.`
+        };
+
+        let currentFiles = {};
+
+        function updateFilesWithDomain(domainText) {
+            currentFiles = {};
+            for (let [k, template] of Object.entries(baseFiles)) {
+                let replaced = template.replace(/{DOMAIN_TITLE}/g, domainText);
+                currentFiles[k] = replaced;
+            }
+        }
+
+        // Initialize with default domain
+        updateFilesWithDomain(currentDomainName);
+
+        function renderPresets(filter = 'all') {
+            const grid = document.getElementById('presets-grid');
+            grid.innerHTML = '';
+            
+            const filtered = filter === 'all' ? domainPresets : domainPresets.filter(p => p.cat === filter);
+            
+            filtered.forEach(p => {
+                const card = document.createElement('div');
+                card.className = "p-3 border border-slate-200 rounded-xl hover:border-brand-500 hover:bg-indigo-50/30 transition cursor-pointer flex flex-col justify-between";
+                card.onclick = () => {
+                    document.getElementById('custom-domain-input').value = p.title;
+                };
+                card.innerHTML = `
+                    <div>
+                        <div class="font-bold text-slate-800 text-xs mb-0.5">${p.title}</div>
+                        <div class="text-slate-500 text-[11px]">${p.desc}</div>
+                    </div>
+                    <div class="mt-2 text-[10px] text-brand-600 font-semibold flex items-center space-x-1">
+                        <span>선택하기</span>
+                        <span>→</span>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function filterPresets(cat) {
+            ['all', 'ai', 'lifestyle', 'creator', 'indie'].forEach(c => {
+                const btn = document.getElementById(`tab-${c}`);
+                if (c === cat) {
+                    btn.className = "px-3 py-1 text-xs font-semibold rounded-lg bg-brand-600 text-white transition";
+                } else {
+                    btn.className = "px-3 py-1 text-xs font-semibold rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200 transition";
+                }
+            });
+            renderPresets(cat);
+        }
+
+        function renderNav() {
+            const nav = document.getElementById('step-nav');
+            nav.innerHTML = '';
+            
+            const fileKeys = Object.keys(currentFiles);
+            fileKeys.forEach((key, index) => {
+                const titleMap = {
+                    '1_2.md': '1. 코치 세팅 (초안 1)',
+                    '2_2.md': '2. 코치 세팅 (초안 2)',
+                    '3_2.md': '3. 고객가설 및 사업기회',
+                    '4_2.md': '4. 사업계획서 초안 요구사항',
+                    '5_2.md': '5. 3단계 사업계획서 초안',
+                    '6_2.md': '6. 4-1단계 Mini PRD',
+                    '7_2.md': '7. 4-2단계 Mock MVP PRD'
+                };
+
+                const btn = document.createElement('button');
+                btn.className = `w-full text-left px-3 py-2.5 rounded-xl text-xs font-medium transition flex items-center justify-between group ${activeFileKey === key ? 'bg-indigo-50 text-brand-700 font-semibold shadow-xs' : 'text-slate-600 hover:bg-slate-100'}`;
+                btn.innerHTML = `
+                    <span class="truncate">${titleMap[key] || key}</span>
+                    <span class="text-[10px] px-1.5 py-0.5 rounded bg-slate-200/60 text-slate-500 group-hover:bg-slate-200">${key}</span>
+                `;
+                btn.onclick = () => selectFile(key);
+                nav.appendChild(btn);
+            });
+
+            const activeIdx = fileKeys.indexOf(activeFileKey) + 1;
+            document.getElementById('active-step-badge').textContent = `${activeIdx}/7 단계`;
+        }
+
+        function selectFile(key) {
+            if (isEditing) {
+                saveCurrentEdit();
+            }
+            activeFileKey = key;
+            renderNav();
+            updateDocView();
+        }
+
+        function updateDocView() {
+            document.getElementById('doc-badge').textContent = activeFileKey;
+            
+            const titleMap = {
+                '1_2.md': '스타트업 코치 역할 및 진행 원칙 (1)',
+                '2_2.md': '스타트업 코치 역할 및 진행 원칙 (2)',
+                '3_2.md': '2단계: 고객가설 및 사업기회 분석 결과',
+                '4_2.md': '3단계 사업계획서 작성 요청서',
+                '5_2.md': '3단계 사업계획서 초안 결과물',
+                '6_2.md': '4-1단계: MVP 정의 및 Mini PRD',
+                '7_2.md': '4-2단계: Claude Code Mock MVP 개발 PRD'
+            };
+
+            document.getElementById('doc-title').textContent = titleMap[activeFileKey] || activeFileKey;
+            
+            const content = currentFiles[activeFileKey];
+            document.getElementById('viewer-pane').textContent = content;
+            document.getElementById('editor-pane').value = content;
+        }
+
+        function toggleEditMode() {
+            isEditing = !isEditing;
+            const viewer = document.getElementById('viewer-pane');
+            const editor = document.getElementById('editor-pane');
+            const btn = document.getElementById('edit-mode-btn');
+
+            if (isEditing) {
+                viewer.classList.add('hidden');
+                editor.classList.remove('hidden');
+                btn.textContent = '저장하기';
+                btn.classList.remove('bg-brand-600', 'hover:bg-brand-700');
+                btn.classList.add('bg-emerald-600', 'hover:bg-emerald-700');
+            } else {
+                currentFiles[activeFileKey] = editor.value;
+                editor.classList.add('hidden');
+                viewer.classList.remove('hidden');
+                btn.textContent = '편집하기';
+                btn.classList.remove('bg-emerald-600', 'hover:bg-emerald-700');
+                btn.classList.add('bg-brand-600', 'hover:bg-brand-700');
+                updateDocView();
+                showToast('변경사항이 저장되었습니다.');
+            }
+        }
+
+        function saveCurrentEdit() {
+            if (isEditing) {
+                currentFiles[activeFileKey] = document.getElementById('editor-pane').value;
+                isEditing = false;
+                document.getElementById('editor-pane').classList.add('hidden');
+                document.getElementById('viewer-pane').classList.remove('hidden');
+                const btn = document.getElementById('edit-mode-btn');
+                btn.textContent = '편집하기';
+                btn.classList.remove('bg-emerald-600');
+                btn.classList.add('bg-brand-600');
+            }
+        }
+
+        function copyCurrentContent() {
+            saveCurrentEdit();
+            const text = currentFiles[activeFileKey];
+            document.execCommand ? copyLegacy(text) : navigator.clipboard.writeText(text);
+            showToast('현재 문서 내용이 복사되었습니다.');
+        }
+
+        function copyLegacy(text) {
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+        }
+
+        function downloadCurrentFile() {
+            saveCurrentEdit();
+            const text = currentFiles[activeFileKey];
+            const blob = new Blob([text], { type: 'text/markdown;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = activeFileKey;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            showToast(`${activeFileKey} 파일이 다운로드되었습니다.`);
+        }
+
+        function downloadAllMarkdown() {
+            saveCurrentEdit();
+            let combined = "# 전체 초안 및 단계별 문서 모음 (Domain: " + currentDomainName + ")\n\n";
+            for (const [k, v] of Object.entries(currentFiles)) {
+                combined += `\n\n---\n\n## File: ${k}\n\n` + v;
+            }
+            const blob = new Blob([combined], { type: 'text/markdown;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'all_drafts_download.md';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            showToast('통합본(all_drafts_download.md)이 다운로드되었습니다.');
+        }
+
+        function openDomainModal() {
+            document.getElementById('domain-modal').classList.remove('hidden');
+        }
+
+        function closeDomainModal() {
+            document.getElementById('domain-modal').classList.add('hidden');
+        }
+
+        function applySelectedDomain() {
+            const val = document.getElementById('custom-domain-input').value.trim();
+            if (val) {
+                currentDomainName = val;
+                document.getElementById('current-domain-label').textContent = currentDomainName;
+                updateFilesWithDomain(currentDomainName);
+                updateDocView();
+                showToast(`모든 초안이 [${currentDomainName}] 도메인에 맞게 재생성되었습니다.`);
+            }
+            closeDomainModal();
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-msg').textContent = msg;
+            toast.classList.remove('translate-y-16', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-16', 'opacity-0');
+            }, 3000);
+        }
+
+        // Initialize on load
+        window.onload = function() {
+            renderPresets('all');
+            renderNav();
+            updateDocView();
+        };
+    </script>
+</body>
+</html>
